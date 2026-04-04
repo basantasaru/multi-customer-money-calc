@@ -10,28 +10,26 @@
 </head>
 <body>
 
+    
     <div class="app-container">
-        <header>
-            <h1>Shop Total App</h1>
-        </header>
-
-        <div id="customer-list" class="customer-list">
+        <h1>Multi-Customer Calculator</h1>
+        <div id="customer-list" class="customer-list"></div>
+        
+        <div id="control-panel" class="input-panel locked">
+            <div class="status-bar">
+                <span id="active-label" class="warning">SELECT PERSON</span>
+                <span id="active-total"></span>
             </div>
-
-        <div class="input-panel">
-            <div class="active-info">
-                <span id="active-label">Selecting: Person 1</span>
-                <span id="current-sum">Total: Rs 0</span>
+            <input type="number" id="money-input" placeholder="0" inputmode="decimal">
+            <div class="button-grid">
+                <button onclick="calc('add')" class="btn btn-add">ADD</button>
+                <button onclick="calc('sub')" class="btn btn-sub">SUB</button>
+                <button onclick="resetCurrent()" class="btn btn-clear">CLR</button>
             </div>
-            <input type="number" id="money-input" placeholder="Enter amount" inputmode="decimal">
-            <div class="button-group">
-                <button onclick="updateTotal('add')" class="btn add">ADD</button>
-                <button onclick="updateTotal('subtract')" class="btn sub">SUBTRACT</button>
-                <button onclick="clearCurrent()" class="btn clear">CLEAR</button>
-            </div>
-            <button onclick="resetAll()" class="btn reset-all">Reset All Customers</button>
+            <span class="reset-link" onclick="resetAll()">Reset All Data</span>
         </div>
     </div>
+
 
     <script src="script.js"></script>
 </body>
