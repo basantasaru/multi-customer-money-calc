@@ -114,3 +114,26 @@
     background: transparent; 
     border: 1px solid #475569; 
     }
+/* This fades the input panel when no one is selected */
+.input-panel.locked {
+    opacity: 0.5;
+    pointer-events: none; /* This physically stops any clicks/taps */
+    filter: grayscale(1);
+}
+
+.input-panel.active {
+    opacity: 1;
+    pointer-events: auto;
+    filter: none;
+}
+
+/* Visual cue for the user */
+#active-label.no-selection {
+    color: var(--red);
+    animation: blink 1s infinite;
+}
+
+@keyframes blink {
+    50% { opacity: 0.5; }
+}
+
