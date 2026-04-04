@@ -1,0 +1,116 @@
+:root {
+    --bg-color: #0f172a;
+    --card-bg: #1e293b;
+    --accent: #fbbf24;
+    --green: #22c55e;
+    --red: #ef4444;
+    --blue: #3b82f6;
+    --text: #f8fafc;
+    }
+    
+    body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text);
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    }
+    
+    .app-container {
+    width: 100%;
+    max-width: 500px;
+    padding: 10px;
+    padding-bottom: 220px; /* Space for the fixed bottom panel */
+    }
+    
+    h1 { text-align: center; color: var(--accent); font-size: 1.5rem; }
+    
+    .customer-card {
+    background: var(--card-bg);
+    margin-bottom: 10px;
+    padding: 15px;
+    border-radius: 10px;
+    border: 2px solid transparent;
+    transition: 0.3s;
+    }
+    
+    .customer-card.active {
+    border-color: var(--accent);
+    background: #2d3748;
+    }
+    
+    .card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    }
+    
+    .total-display {
+    font-size: 1.4rem;
+    font-weight: bold;
+    color: var(--accent);
+    }
+    
+    .history {
+    font-size: 0.8rem;
+    color: #94a3b8;
+    margin-top: 5px;
+    word-wrap: break-word;
+    }
+    
+    /* Input Panel at Bottom */
+    .input-panel {
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    max-width: 500px;
+    background: #1e293b;
+    padding: 15px;
+    box-shadow: 0 -5px 15px rgba(0,0,0,0.5);
+    border-top: 2px solid var(--accent);
+    }
+    
+    .active-info {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    font-weight: bold;
+    }
+    
+    input {
+    width: 100%;
+    padding: 12px;
+    font-size: 1.2rem;
+    border-radius: 5px;
+    border: none;
+    margin-bottom: 10px;
+    box-sizing: border-box;
+    }
+    
+    .button-group {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 10px;
+    }
+    
+    .btn {
+    padding: 15px;
+    border: none;
+    border-radius: 5px;
+    font-weight: bold;
+    color: white;
+    cursor: pointer;
+    }
+    
+    .add { background: var(--green); }
+    .sub { background: var(--blue); }
+    .clear { background: var(--red); }
+    .reset-all { 
+    width: 100%; 
+    margin-top: 10px; 
+    background: transparent; 
+    border: 1px solid #475569; 
+    }
