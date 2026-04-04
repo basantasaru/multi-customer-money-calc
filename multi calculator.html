@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Multi-Customer Money Calculator</title>
+    <style type="text/css">
+    :root {
+    --bg-color: #0f172a;
+    --card-bg: #1e293b;
+    --accent: #fbbf24;
+    --green: #22c55e;
+    --red: #ef4444;
+    --blue: #3b82f6;
+    --text: #f8fafc;
+    }
+    
+    body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text);
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    }
+    
+    .app-container {
+    width: 100%;
+    max-width: 500px;
+    padding: 10px;
+    padding-bottom: 220px; /* Space for the fixed bottom panel */
+    }
+    
+    h1 { text-align: center; color: var(--accent); font-size: 1.5rem; }
+    
+    .customer-card {
+    background: var(--card-bg);
+    margin-bottom: 10px;
+    padding: 15px;
+    border-radius: 10px;
+    border: 2px solid transparent;
+    transition: 0.3s;
+    }
+    
+    .customer-card.active {
+    border-color: var(--accent);
+    background: #2d3748;
+    }
+    
+    .card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    }
+    
+    .total-display {
+    font-size: 1.4rem;
+    font-weight: bold;
+    color: var(--accent);
+    }
+    
+    .history {
+    font-size: 0.8rem;
+    color: #94a3b8;
+    margin-top: 5px;
+    word-wrap: break-word;
+    }
+    
+    /* Input Panel at Bottom */
+    .input-panel {
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    max-width: 500px;
+    background: #1e293b;
+    padding: 15px;
+    box-shadow: 0 -5px 15px rgba(0,0,0,0.5);
+    border-top: 2px solid var(--accent);
+    }
+    
+    .active-info {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    font-weight: bold;
+    }
+    
+    input {
+    width: 100%;
+    padding: 12px;
+    font-size: 1.2rem;
+    border-radius: 5px;
+    border: none;
+    margin-bottom: 10px;
+    box-sizing: border-box;
+    }
+    
+    .button-group {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 10px;
+    }
+    
+    .btn {
+    padding: 15px;
+    border: none;
+    border-radius: 5px;
+    font-weight: bold;
+    color: white;
+    cursor: pointer;
+    }
+    
+    .add { background: var(--green); }
+    .sub { background: var(--blue); }
+    .clear { background: var(--red); }
+    .reset-all { 
+    width: 100%; 
+    margin-top: 10px; 
+    background: transparent; 
+    border: 1px solid #475569; 
+    }
+    
+    </style>
+</head>
+<body>
+
+    <div class="app-container">
+        <header>
+            <h1>Shop Total App</h1>
+        </header>
+
+        <div id="customer-list" class="customer-list">
+            </div>
+
+        <div class="input-panel">
+            <div class="active-info">
+                <span id="active-label">Selecting: Person 1</span>
+                <span id="current-sum">Total: Rs 0</span>
+            </div>
+            <input type="number" id="money-input" placeholder="Enter amount" inputmode="decimal">
+            <div class="button-group">
+                <button onclick="updateTotal('add')" class="btn add">ADD</button>
+                <button onclick="updateTotal('subtract')" class="btn sub">SUBTRACT</button>
+                <button onclick="clearCurrent()" class="btn clear">CLEAR</button>
+            </div>
+            <button onclick="resetAll()" class="btn reset-all">Reset All Customers</button>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+    
+    let customers = JSON.parse(localStorage.getItem('shopData')) || [
+    { id: 1, total: 0, history: [] },
+    { id: 2, total: 0, history: [] },
+    { id: 3, total: 0, history: [] },
+    { id: 4, total: 0, history: [] },
+    { id: 5, total: 0, history: [] }
+    ];
+    
+    let activeId = 1;
+    
+    function init() {
+    const list = document.getElementById('customer-list');
+    list.innerHTML = '';
+    
+    customers.forEach(c => {
+    const card = document.createElement('div');
+    card.className = `customer-card ${c.id === activeId ? 'active' : ''}`;
+    
+    // When you tap the card, it sets active AND focuses the input
+    card.onclick = () => {
+    setActive(c.id);
+    };
+    
+    card.innerHTML = `
+    <div class="card-header">
+    <span>Person ${c.id}</span>
+    <span class="total-display">Rs ${c.total}</span>
+    </div>
+    <div class="history">History: ${c.history.join(', ') || 'No entries'}</div>
+    `;
+    list.appendChild(card);
+    });
+    
+    updatePanelInfo();
+    saveData();
+    }
+    
+    function setActive(id) {
+    activeId = id;
+    init();
+    
+    // THE FIX: Automatically focus the input and show keyboard
+    const inputField = document.getElementById('money-input');
+    inputField.focus();
+    
+    // Optional: Clear previous value if any for a fresh start
+    inputField.value = ''; 
+    }
+    
+    function updatePanelInfo() {
+    const activeCust = customers.find(c => c.id === activeId);
+    document.getElementById('active-label').innerText = `Selecting: Person ${activeId}`;
+    document.getElementById('current-sum').innerText = `Total: Rs ${activeCust.total}`;
+    }
+    
+    function updateTotal(type) {
+    const input = document.getElementById('money-input');
+    const val = parseFloat(input.value);
+    
+    if (isNaN(val)) {
+    input.focus(); // Keep focus if they press button without number
+    return;
+    }
+    
+    const cust = customers.find(c => c.id === activeId);
+    
+    if (type === 'add') {
+    cust.total += val;
+    cust.history.push(`+${val}`);
+    } else {
+    cust.total -= val;
+    cust.history.push(`-${val}`);
+    }
+    
+    input.value = '';
+    input.focus(); // Keep keyboard open for the next item from same customer
+    init();
+    }
+    
+    function clearCurrent() {
+    if(confirm("Clear history for this person?")) {
+    const cust = customers.find(c => c.id === activeId);
+    cust.total = 0;
+    cust.history = [];
+    init();
+    document.getElementById('money-input').focus();
+    }
+    }
+    
+    function resetAll() {
+    if(confirm("Are you sure you want to clear ALL customers?")) {
+    customers.forEach(c => {
+    c.total = 0;
+    c.history = [];
+    });
+    init();
+    }
+    }
+    
+    function saveData() {
+    localStorage.setItem('shopData', JSON.stringify(customers));
+    }
+    
+    // Initial load
+    init();
+    
+    
+    </script>
+</body>
+</html>
