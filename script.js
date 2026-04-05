@@ -4,7 +4,7 @@
             { id: 2, total: 0, history: [] },
             { id: 3, total: 0, history: [] },
             { id: 4, total: 0, history: [] },
-            { id: 5, total: 0, history: [] }
+            { id: 6, total: 0, history: [] }
         ];
 
         let activeId = null;
