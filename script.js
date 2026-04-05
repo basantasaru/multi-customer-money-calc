@@ -1,4 +1,4 @@
- // Data Management
+   // Data Management
         let customers = JSON.parse(localStorage.getItem('shopData')) || [
             { id: 1, total: 0, history: [] },
             { id: 2, total: 0, history: [] },
