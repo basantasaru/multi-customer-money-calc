@@ -75,18 +75,21 @@
             }
 
             input.value = '';
-            render();
-            input.focus();
+            activeId = null;
+render();
         }
 
         function resetCurrent() {
-            if (activeId === null) return;
-            if (confirm(`Clear Person ${activeId}?`)) {
-                const cust = customers.find(c => c.id === activeId);
-                cust.total = 0;
-                cust.history = [];
-                render();
-            }
+  if (activeId === null) return;
+
+  if (confirm(`Clear Person ${activeId}?`)) {
+    const cust = customers.find(c => c.id === activeId);
+    cust.total = 0;
+    cust.history = [];
+    activeId = null;
+    render();
+  
+}
         }
 
         function resetAll() {
